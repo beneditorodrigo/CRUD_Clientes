@@ -17,4 +17,9 @@ public class ClienteController {
     public Cliente cadastrar(@RequestBody Cliente cliente){
         return clienteRepository.save(cliente);
     }
+
+    @GetMapping("clientes")
+    public List<Cliente> listarClientes(){
+        return clienteRepository.findAll();
+    }
 }
