@@ -15,7 +15,14 @@ public class ClienteController {
     private ClienteRepository clienteRepository;
 
     @PostMapping("cliente")
-    public Cliente cadastrar(@RequestBody Cliente cliente){
+    public Cliente cadastrar(@RequestBody Cliente cliente) throws Exception {
+        boolean emailEmUso = clienteRepository.findByEmail(cliente.getEmail())
+                .stream()
+                .anyMatch(clienteExistente -> !clienteExistente.equals(cliente));
+
+        if(emailEmUso){
+            throw new Exception("Email já em uso");
+        }
         return clienteRepository.save(cliente);
     }
 
