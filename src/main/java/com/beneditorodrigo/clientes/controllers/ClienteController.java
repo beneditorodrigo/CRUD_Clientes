@@ -35,4 +35,17 @@ public class ClienteController {
     public Optional<Cliente> buscarCliente(@PathVariable Long id){
         return clienteRepository.findById(id);
     }
+
+    @DeleteMapping("cliente/{id}")
+    public void excluirCliente(@PathVariable Long id) throws Exception {
+        boolean idExiste = clienteRepository.findById(id)
+                .stream()
+                .anyMatch(clienteExiste -> !clienteExiste.equals(id));
+
+        if (!idExiste){
+            throw new Exception("ID não existe");
+        }
+
+        clienteRepository.deleteById(id);
+    }
 }
