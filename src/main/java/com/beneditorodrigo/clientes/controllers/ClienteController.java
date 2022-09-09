@@ -6,6 +6,7 @@ import com.beneditorodrigo.clientes.service.ClienteService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 import java.util.Optional;
 
@@ -19,7 +20,7 @@ public class ClienteController {
     private ClienteService clienteService;
 
     @PostMapping("cliente")
-    public Cliente cadastrar(@RequestBody Cliente cliente) throws Exception {
+    public Cliente cadastrar(@Valid @RequestBody Cliente cliente) throws Exception {
         boolean emailEmUso = clienteService.verificaEmailEmUso(cliente);
 
         if(emailEmUso){
@@ -40,7 +41,7 @@ public class ClienteController {
 
 
     @PutMapping("cliente/{id}")
-    public Cliente atualizaCliente(@PathVariable Long id, @RequestBody Cliente cliente) throws Exception {
+    public Cliente atualizaCliente(@PathVariable Long id, @Valid @RequestBody Cliente cliente) throws Exception {
         boolean idExiste = clienteService.verificaExistenciaId(id);
 
         if(!idExiste){
