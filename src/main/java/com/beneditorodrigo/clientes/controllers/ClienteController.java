@@ -20,9 +20,7 @@ public class ClienteController {
 
     @PostMapping("cliente")
     public Cliente cadastrar(@RequestBody Cliente cliente) throws Exception {
-        boolean emailEmUso = clienteRepository.findByEmail(cliente.getEmail())
-                .stream()
-                .anyMatch(clienteExistente -> !clienteExistente.equals(cliente));
+        boolean emailEmUso = clienteService.verificaEmailEmUso(cliente);
 
         if(emailEmUso){
             throw new Exception("Email já em uso");
@@ -38,6 +36,19 @@ public class ClienteController {
     @GetMapping("cliente/{id}")
     public Optional<Cliente> buscarCliente(@PathVariable Long id){
         return clienteRepository.findById(id);
+    }
+
+
+    @PutMapping("cliente/{id}")
+    public Cliente atualizaCliente(@PathVariable Long id, @RequestBody Cliente cliente) throws Exception {
+        boolean idExiste = clienteService.verificaExistenciaId(id);
+
+        if(!idExiste){
+            throw new Exception("ID/Cliente inexistente");
+        }
+
+        cliente.setId(id);
+        return clienteRepository.save(cliente);
     }
 
     @DeleteMapping("cliente/{id}")
