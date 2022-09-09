@@ -2,6 +2,7 @@ package com.beneditorodrigo.clientes.controllers;
 
 import com.beneditorodrigo.clientes.entity.Cliente;
 import com.beneditorodrigo.clientes.repository.ClienteRepository;
+import com.beneditorodrigo.clientes.service.ClienteService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -13,6 +14,9 @@ public class ClienteController {
 
     @Autowired
     private ClienteRepository clienteRepository;
+
+    @Autowired
+    private ClienteService clienteService;
 
     @PostMapping("cliente")
     public Cliente cadastrar(@RequestBody Cliente cliente) throws Exception {
@@ -38,9 +42,7 @@ public class ClienteController {
 
     @DeleteMapping("cliente/{id}")
     public void excluirCliente(@PathVariable Long id) throws Exception {
-        boolean idExiste = clienteRepository.findById(id)
-                .stream()
-                .anyMatch(clienteExiste -> !clienteExiste.equals(id));
+        boolean idExiste = clienteService.verificaExistenciaId(id);
 
         if (!idExiste){
             throw new Exception("ID não existe");
